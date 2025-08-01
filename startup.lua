@@ -1,19 +1,16 @@
-local modemSide = "left"  -- modem filaire ici
-local redstoneSide = "right"  -- redstone branchée ici
-local channel = 12
-
--- Ouvre le modem
-rednet.open(modemSide)
-
-print("Attente du signal...")
+local monitors = { peripheral.find("monitor") }
 
 while true do
-  local id, msg = rednet.receive(channel)
-  if msg == "unlock" then
-    print("Déverrouillage reçu.")
-    redstone.setOutput(redstoneSide, true)
-    os.sleep(0.05)
-    redstone.setOutput(redstoneSide, false)
-  end
-end
+  local time = math.floor((os.time() * 1000) % 24000)
+  local hour = math.floor(time / 1000)
+  local minute = math.floor((time % 1000) * 60 / 1000)
+  local timeString = string.format("Heure Minecraft : %02d:%02d", hour, minute)
 
+  for _, monitor in ipairs(monitors) do
+    monitor.clear()
+    monitor.setCursorPos(1, 1)
+    monitor.write(timeString)
+  end
+
+  sleep(1)
+end
