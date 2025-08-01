@@ -1,16 +1,29 @@
-local monitors = { peripheral.find("monitor") }
+local monitor = peripheral.find("monitor")
+monitor.setTextScale(3) -- Grande taille
+monitor.setBackgroundColor(colors.black)
 
 while true do
-  local time = math.floor((os.time() * 1000) % 24000)
-  local hour = math.floor(time / 1000)
-  local minute = math.floor((time % 1000) * 60 / 1000)
-  local timeString = string.format("Heure Minecraft : %02d:%02d", hour, minute)
+    -- Heure Minecraft
+    local time = math.floor((os.time() * 1000) % 24000)
+    local hour = math.floor(time / 1000)
+    local minute = math.floor((time % 1000) * 60 / 1000)
+    local timeStr = string.format("%02d:%02d", hour, minute)
 
-  for _, monitor in ipairs(monitors) do
     monitor.clear()
-    monitor.setCursorPos(1, 1)
-    monitor.write(timeString)
-  end
 
-  sleep(1)
+    -- Affichage de l'heure
+    monitor.setCursorPos(2, 2)
+    monitor.setTextColor(colors.white)
+    monitor.write(timeStr)
+
+    -- Affichage du message
+    local w, h = monitor.getSize()
+    local message = "Welcome to Chatty Corp"
+    monitor.setCursorPos(math.floor((w - #message) / 2) + 1, h)
+    monitor.setTextColor(colors.green)
+    monitor.setTextScale(1) -- Texte normal pour bas
+    monitor.write(message)
+
+    monitor.setTextScale(3) -- Revenir à grand pour l'heure
+    sleep(1)
 end
